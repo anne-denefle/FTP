@@ -1,0 +1,25 @@
+#!/bin/bash
+cd /tmp
+apt-get update && apt-get install proftpd proftpd-mod-crypto -y
+
+service proftpd stop
+rm /etc/proftpd/modules.conf
+rm /etc/proftpd/proftpd.conf
+rm /etc/proftpd/tls.conf
+ 
+file_url1=https://raw.githubusercontent.com/anne-denefle/oto/main/modules.conf
+file_url2=https://raw.githubusercontent.com/anne-denefle/oto/main/proftpd.conf
+file_url3=https://raw.githubusercontent.com/anne-denefle/oto/main/tls.conf
+
+# Répertoire d'installation
+#install_dir="/tmp/install"
+
+# Création du répertoire d'installation s'il n'existe pas
+#mkdir -p "$install_dir"
+
+# Téléchargement du fichier avec wget
+wget "$file_url1" -o "/etc/proftpd/modules.conf"
+wget "$file_url2" -o "/etc/proftpd/proftpd.conf"
+wget "$file_url3" -o "/etc/proftpd/tls.conf"
+
+service proftpd restart

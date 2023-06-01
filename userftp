@@ -1,0 +1,27 @@
+#!/bin/bash
+#
+#
+
+#stocker le parametre dans une variable
+apt-get install csvtool sudo && apt update -y
+fichier="/home/anne/Shell_Userlist.csv" 
+sed -i 's/ //g' Shell_Userlist.csv
+apt install sudo -y
+
+while IFS=',' read Id Prenom Nom Pwd Role
+	do
+	 create_user() { 
+		local username=$1 
+		local password=$2 
+		local id=$3 
+		local role=$4 
+		sudo useradd -m $username -p $password -u $id --shell /bin/false
+        	echo "ROLE:" $role
+	 	if [[ "$role" == "Admin" ]]; then
+           		sudo useradd $username sudo
+			sudo usermod -aG sudo $username
+         	fi
+	echo "l'utilisateur a été créé avec success : $username $id"
+}
+create_user  "$Prenom.$Nom" $Pwd $Id $Role
+done  <$fichier
